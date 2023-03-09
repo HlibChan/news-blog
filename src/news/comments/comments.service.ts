@@ -1,36 +1,49 @@
 import { Injectable } from '@nestjs/common';
-import { getRandomInt } from '../news/news.sevice';
+import { getRandomInt } from '../../utils/utils';
 
 export type Comment = {
   id?: number;
   message: string;
   author: string;
+  logo?: string;
   idNews: number;
-  answer?: Comment[];
   idAnswer?: number;
 };
 
-export type EditComment = {
-  id: number;
-  message: string;
-  author: string;
-  idNews: number;
-  answer?: Comment[];
-};
+export type EditComment = Partial<Comment>;
+
+export type Comments = Record<string, Comment[]>;
 
 @Injectable()
 export class CommentsService {
-  private readonly comments = {
+  private readonly comments: Comments = {
     '1': [
-      { idNews: '1', author: 'Igor', message: 'Nice', id: 1 },
-      { idNews: '1', author: 'Ben', message: 'Wanderful', id: 2 },
-      { idNews: '1', author: 'Jin', message: 'Cool', id: 3, idAnswer: 1 },
+      { idNews: 1, author: 'First', message: 'First message 123', id: 1 },
+      { idNews: 1, author: 'Second', message: 'Second message 123', id: 2 },
+      {
+        idNews: 1,
+        author: 'first Answer',
+        message: 'first Answer messsge123',
+        id: 3,
+        idAnswer: 1,
+      },
+      {
+        idNews: 1,
+        author: 'Secong answEugen',
+        message: 'Second answer message',
+        id: 4,
+        idAnswer: 1,
+      },
     ],
   };
 
   create(idNews: number, comment: Comment) {
+    console.log('service');
     if (idNews === undefined && comment.idNews) {
       idNews = comment.idNews;
+    }
+    if (comment.id) {
+      return this.edit(idNews, comment.id, comment);
     }
     if (this.comments[idNews] === undefined) {
       this.comments[idNews] = [];
@@ -39,12 +52,14 @@ export class CommentsService {
       ...comment,
       id: getRandomInt(),
     });
-    console.log(this.comments);
     return this.comments[idNews];
   }
 
   find(idNews: number): Comment[] {
-    return this.comments[idNews] || undefined;
+    if (!this.comments[idNews]) {
+      this.comments[idNews] = [];
+    }
+    return this.comments[idNews];
   }
 
   remove(idNews: number, idComment: number): Comment[] | null {
