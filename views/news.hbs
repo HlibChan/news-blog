@@ -1,0 +1,90 @@
+<div class='row'>
+    {{#if this}}
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="col-10 col-sm-8 col-lg-6">
+                <img src="{{this.cover}}" class="d-block mx-lg-auto img-fluid" alt="{{this.title}}" width="700"
+                     height="500" loading="lazy">
+            </div>
+            <div class="col-lg-6">
+                <h1 class="display-5 fw-bold lh-1 mb-3">{{this.title}}</h1>
+                <div class="text-muted">Дата создания: {{this.createdAt}}</div>
+                <div class="text-muted">Автор: {{this.user.firstName}} {{this.user.lastName}}</div>
+                <p class="lead">{{this.description}}</p>
+                <a href='/news/{{this.id}}/edit'>Редактировать</a>
+            </div>
+        </div>
+    {{else}}
+        <h1>Новость не найдена!</h1>
+    {{/if}}
+    <!--    <div class='col-sm'>-->
+        <!--        {{#if comments}}-->
+        <!--            {{#each comments}}-->
+        <!--                <li id='{{this.id}}'>-->
+            <!--                    {{#if this.logo}}-->
+            <!--                        <img-->
+            <!--                                src='{{this.logo}}'-->
+            <!--                                style='border-radius: 25%; height: 100px'-->
+            <!--                                alt="Место для Вашего лого"-->
+            <!--                        />-->
+                <!--                    {{/if}}-->
+        <!--                    Author:-->
+        <!--                    {{this.user.firstName}}-->
+        <!--                    <br/>-->
+        <!--                    Message:-->
+            <!--                    {{#if this.idAnswer}}-->
+                <!--                        <a href='#{{this.idAnswer}}'>{{this.idAnswer}}</a>{{/if}}-->
+        <!--                    {{this.message}}-->
+        <!--                    <br/>-->
+        <!--                    <div onclick="sendForm({{this.id}})">X</div>-->
+        <!--                    <button-->
+        <!--                            id='{{this.id}}'-->
+        <!--                            onclick='replyComment(event)'-->
+        <!--                    >Reply-->
+        <!--                    </button>-->
+        <!--                </li>-->
+            <!--            {{/each}}-->
+        <!--        {{/if}}-->
+    <!--        <form-->
+    <!--                action='/comments/api/{{this.id}}'-->
+    <!--                id='comments'-->
+    <!--                method='post'-->
+    <!--        >-->
+    <!--            <input-->
+    <!--                    style='display:none;'-->
+    <!--                    name='idNews'-->
+    <!--                    value='{{this.id}}'-->
+    <!--                    readonly-->
+    <!--            />-->
+    <!--            <input style='display:none;' name='idAnswer' value=''/>-->
+    <!--            <input name='message' type='text' placeholder='Message' required/>-->
+    <!--            <button>Отправить сообщение</button>-->
+    <!--        </form>-->
+    <!--</div>-->
+    <h2 class="fw-bold lh-1 mb-3">Комментарии</h2>
+    <div id="app">
+    </div>
+
+    <script src="/js/comments.js" type="text/babel"></script>
+    <script>
+        function replyComment(e) {
+            const form =
+                    document.querySelector("#comments");
+            form.idAnswer.value = e.target.id;
+            console.log('id заменен на ' + form.idAnswer.value)
+        }
+
+        function sendForm(id) {
+            $.ajax({
+                url: `/comments/api/details/${id}`,
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'DELETE',
+                success: function () {
+                    alert('Коммент удален')
+                    window.location.reload();
+                }
+            });
+        }
+    </script>
+</div>

@@ -1,0 +1,36 @@
+<h1>Редактирование новости #{{this.id}}</h1>
+<form method='post' action='/news/api/{{this.id}}/edit' enctype='multipart/form-data'>
+    <div class='mb-3'>
+        <label for='id' class='form-label'>ID Новости, лучше бы его не менять...</label>
+        <input name='id' id='id' value='{{this.id}}'/>
+    </div>
+    <div class='mb-3'>
+        <label for='titleInput' class='form-label'>Заголовок</label>
+        <input
+                class='form-control'
+                name='title'
+                id='titleInput'
+                value='{{this.title}}'
+        />
+    </div>
+    <div class='mb-3'>
+        <label for='descriptionInput' class='form-label'>Описание</label>
+        <textarea
+                class='form-control'
+                name='description'
+                id='descriptionInput'
+                rows='3'
+        >{{this.description}}</textarea>
+    </div>
+    <div class='form-group'>
+        <label for='cover'>Обложка новости</label>
+        <input
+                type='file'
+                class='form-control-file'
+                id='cover'
+                name='cover'
+                value='{{this.cover}}'
+        />
+    </div>
+    <input type='submit' value='Сохранить изменения'/>
+</form>
